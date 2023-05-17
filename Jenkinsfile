@@ -7,7 +7,12 @@ pipeline {
     stage('Test') {
       
       steps {
+        script {
+          def nodejsTool = tool name: 'node-19-tool', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+            env.PATH = "${nodejsTool}/bin:${env.PATH}" 
+        }
         sh 'echo "Running tests..."' 
+        sh 'node --version'
       }
     }
   
@@ -30,6 +35,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'personal-docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) 
         {
           sh "echo ${DOCKER_USERNAME}"
+          sh 'docker - - version'
         }
         
         
